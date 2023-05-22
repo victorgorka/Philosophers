@@ -6,7 +6,7 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 16:26:03 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/19 17:25:12 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:24:42 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,12 @@ typedef struct s_data{
 }	t_data;
 
 /***************** FUNCTIONS ******************/
+
+// init.c
+void	ft_init(t_data *data);
+int		ft_input(int argc, char **argv, t_data *data);
+// utils.c
+int		ft_atoi(const char *str);
+int		ft_check_args(char *arg);
 
 #endif
