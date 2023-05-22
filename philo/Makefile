@@ -1,4 +1,6 @@
-SRCS	= main.c
+SRCS	= 	main.c \
+			utils.c \
+			init.c
 OBJS	= ${SRCS:.c=.o}
 NAME	= philo
 CC		= gcc
