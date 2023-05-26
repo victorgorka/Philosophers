@@ -6,33 +6,104 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 16:39:54 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/22 15:31:50 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/26 19:51:12 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-int	ft_time(t_data *data)
+/**
+ * This function returns the number of miliseconds that have passed from 1970
+ * @param t pointer to time_t type variable
+ * @param time struct where gettimeofday will write the info that it got
+ * @return returns the number of miliseconds
+*/
+int	ft_time(int option)
 {
-	int	ms;
+	struct timeval	time;
+	time_t			t;
 
-	ms = 0;
-	gettimeofday(&data->time, 0);
-	ms = (data->time.tv_sec * 1000) + (data->time.tv_usec / 1000);
-	return (ms - data->stime);
+	t = 0;
+	gettimeofday(&time, 0);
+	t = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+	if (option < 0)
+		return (t);
+	else
+		return (t - option);
+}
+
+int	ft_inanition(t_philo *philos)
+{
+	pthread_mutex_lock(&philos->finish_mutex);
+	if (philos->finish)
+		return (1);
+	pthread_mutex_unlock(&philos->finish_mutex);
+	return (0);
+}
+
+void	*rutina(void *data)
+{
+	t_philo	*philos;
+
+	philos = (t_philo *)data;
+	philos->last_eat = 0;
+	while (philos->n_lunches-- != 0)
+	{
+		pthread_mutex_lock(&philos->fork1);
+		if (ft_inanition(philos))
+		{
+			printf("%d ms %d has died\n", ft_time(philos->stime), philos->index + 1);
+			return (NULL);
+		}
+		printf("%d ms %d has taken fork 1\n", ft_time(philos->stime), philos->index + 1);
+		pthread_mutex_lock(philos->fork2);
+		if (ft_inanition(philos))
+		{
+			printf("%d ms %d has died\n", ft_time(philos->stime), philos->index + 1);
+			return (NULL);
+		}
+		printf("%d ms %d has taken fork 2\n", ft_time(philos->stime), philos->index + 1);
+		printf("%d ms %d is eating\n", ft_time(philos->stime),
+			philos->index + 1);
+		usleep(philos->eat_time * 1000);
+		if (ft_inanition(philos))
+		{
+			printf("%d ms %d has died\n", ft_time(philos->stime), philos->index + 1);
+			return (NULL);
+		}
+		philos->last_eat = ft_time(-1);
+		pthread_mutex_unlock(&philos->fork1);
+		pthread_mutex_unlock(philos->fork2);
+		printf("%d ms %d is sleeping\n", ft_time(philos->stime), philos->index + 1);
+		usleep(philos->sleep_time * 1000);
+		if (ft_inanition(philos))
+		{
+			printf("%d ms %d has died\n", ft_time(philos->stime), philos->index + 1);
+			return (NULL);
+		}
+		printf("%d ms %d is thinking\n", ft_time(philos->stime), philos->index + 1);
+	}
+	printf("%d ms %d has died\n", ft_time(philos->stime), philos->index + 1);
+	return (NULL);
 }
 
 int	main(int argc, char **argv)
 {
-	t_data			data;
+	t_data	data;
+	int		i;
 
-	ft_init(&data);
-	if (ft_input(argc, argv, &data))
+	i = 0;
+	if (ft_input(argc, argv, &data) || ft_init_philosophers(&data))
 		return (1);
-	printf("%d\n", data.n_philo);
-	printf("%d\n", data.die_time);
-	printf("%d\n", data.eat_time);
-	printf("%d\n", data.sleep_time);
-	printf("%d\n", data.n_lunches);
+	while (i < data.n_philo)
+	{
+		if (i % 2 != 0)
+			usleep(50);
+		pthread_create(&data.philos[i].tid, NULL, rutina, &data.philos[i]);
+		i++;
+	}
+	while (1)
+	{
+		usleep(50);
+	}
 	return (0);
 }
