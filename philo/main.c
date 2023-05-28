@@ -6,7 +6,7 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 16:39:54 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/27 20:12:40 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/28 19:36:21 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ time_t	ft_time(time_t option)
 int	ft_inanition(t_philo *philos)
 {
 	pthread_mutex_lock(&philos->finish_mutex);
-	if (philos->finish)
+	if (philos->finish == 1)
 	{
 		pthread_mutex_unlock(&philos->finish_mutex);
 		return (1);
@@ -63,13 +63,11 @@ void	*rutina(void *data)
 			pthread_mutex_lock(philos->fork2);
 		else
 		{
+			pthread_mutex_unlock(&philos->fork1);
 			while (1)
 			{
 				if (ft_inanition(philos))
-				{
-					pthread_mutex_unlock(&philos->fork1);
 					return (NULL);
-				}
 			}
 		}
 		if (ft_inanition(philos))
@@ -88,9 +86,18 @@ void	*rutina(void *data)
 			pthread_mutex_unlock(philos->fork2);
 			return (NULL);
 		}
+		pthread_mutex_lock(&philos->last_eat_mutex);
 		philos->last_eat = ft_time(-1);
+		pthread_mutex_unlock(&philos->last_eat_mutex);
 		pthread_mutex_unlock(&philos->fork1);
 		pthread_mutex_unlock(philos->fork2);
+		if (philos->n_lunches == 0)
+		{
+			pthread_mutex_lock(&philos->finish_mutex);
+			philos->finish = 2;	
+			pthread_mutex_unlock(&philos->finish_mutex);
+			return (NULL);
+		}
 		printf("%ld ms %d is sleeping\n", ft_time(philos->stime), philos->index + 1);
 		usleep(philos->sleep_time * 1000);
 		if (ft_inanition(philos))
@@ -98,7 +105,26 @@ void	*rutina(void *data)
 		printf("%ld ms %d is thinking\n", ft_time(philos->stime), philos->index + 1);
 	}
 	return (NULL);
-			return (NULL);
+}
+
+int	ft_check_finish(t_philo *philos, int n_philos)
+{
+	int	i;
+	int check;
+
+	check = 1;
+	i = 0;
+	while (i < n_philos)
+	{
+		pthread_mutex_lock(&philos[i].finish_mutex);
+		if (philos[i].finish != 2)
+			check = 0;
+		else
+			pthread_detach(philos[i].tid);
+		pthread_mutex_unlock(&philos[i].finish_mutex);
+		i++;
+	}
+	return (check);
 }
 
 int	main(int argc, char **argv)
@@ -113,7 +139,7 @@ int	main(int argc, char **argv)
 	while (i < data.n_philo)
 	{
 		if (i % 2 != 0)
-			usleep(100);
+			usleep(50);
 		pthread_create(&data.philos[i].tid, NULL, rutina, &data.philos[i]);
 		i++;
 	}
@@ -122,8 +148,14 @@ int	main(int argc, char **argv)
 		i = 0;
 		while (i < data.n_philo)
 		{
-			if (ft_time(-1) - data.philos[i].last_eat >= data.die_time)
+			if (ft_check_finish(data.philos, data.n_philo))
+				return (0);
+			pthread_mutex_lock(&data.philos[i].finish_mutex);
+			pthread_mutex_lock(&data.philos[i].last_eat_mutex);
+			if (data.philos[i].finish != 2 && ft_time(-1) - data.philos[i].last_eat >= data.die_time)//posible data race
 			{
+				pthread_mutex_unlock(&data.philos[i].last_eat_mutex);
+				pthread_mutex_unlock(&data.philos[i].finish_mutex);
 				printf("%ld ms %d has died\n", ft_time(data.stime), i + 1);
 				i = 0;
 				while (i < data.n_philo)
@@ -138,7 +170,11 @@ int	main(int argc, char **argv)
 					pthread_join(data.philos[i++].tid, NULL);
 				return (0);
 			}
+			pthread_mutex_unlock(&data.philos[i].finish_mutex);
+			pthread_mutex_unlock(&data.philos[i].last_eat_mutex);
 		}
 	}
 	return (0);
 }
+// en caso de que el hilo acabe naturalmente debo hacer que el hilo principal no lo interprete como
+// muerte de filosofo

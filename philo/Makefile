@@ -20,7 +20,7 @@ SRCS	= 	main.c \
 OBJS	= ${SRCS:.c=.o}
 NAME	= philo
 CC		= gcc
-CFLAGS	= -Wall -Wextra -Werror -pthread
+CFLAGS	= -Wall -Wextra -Werror -pthread 
 RM		= rm -f
 COLOR	= \033[1;36m
 ################# RULES #####################
