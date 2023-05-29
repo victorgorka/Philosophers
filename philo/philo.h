@@ -6,7 +6,7 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 16:26:03 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/25 20:17:21 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/28 19:47:23 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,12 @@ typedef struct s_philo{
 	pthread_mutex_t	fork1;
 	pthread_mutex_t	*fork2;
 	pthread_mutex_t	finish_mutex;
+	pthread_mutex_t last_eat_mutex;
 	time_t			last_eat;
 	time_t			stime;
 	int				index;
 	int				finish;
+	int				n_philo;
 	int				die_time;
 	int				eat_time;
 	int				sleep_time;
