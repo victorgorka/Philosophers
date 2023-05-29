@@ -29,7 +29,6 @@ all: $(NAME)
 
 
 $(NAME): ${OBJS}
-	@echo "\nCOMPILING PHILOSOPHERS"
 	@${CC} ${CFLAGS} ${OBJS} -o ${NAME}
 	@echo "$(COLOR)$$HEADER"
 

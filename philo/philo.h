@@ -6,20 +6,20 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 16:26:03 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/28 19:47:23 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/29 17:07:42 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
-
-/**************** DEFINITIONS *****************/
+/***************** INCLUDES *******************/
 # include <pthread.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <sys/time.h>
 # include <stdlib.h>
 
+/**************** DEFINITIONS *****************/
 typedef struct s_philo{
 	pthread_t		tid;
 	pthread_mutex_t	fork1;
