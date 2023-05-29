@@ -6,7 +6,7 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 16:39:54 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/28 19:36:21 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/29 16:28:43 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,15 @@ int	ft_inanition(t_philo *philos)
 	return (0);
 }
 
+void	ft_sleep(time_t t)
+{
+	time_t	start;
+
+	start = ft_time(-1);
+	while (ft_time(start) < t)
+		usleep(125);
+}
+
 void	*rutina(void *data)
 {
 	t_philo	*philos;
@@ -79,7 +88,7 @@ void	*rutina(void *data)
 		printf("%ld ms %d has taken fork 2\n", ft_time(philos->stime), philos->index + 1);
 		printf("%ld ms %d is eating\n", ft_time(philos->stime),
 			philos->index + 1);
-		usleep(philos->eat_time * 1000);
+		ft_sleep(philos->eat_time);
 		if (ft_inanition(philos))
 		{
 			pthread_mutex_unlock(&philos->fork1);
@@ -99,7 +108,7 @@ void	*rutina(void *data)
 			return (NULL);
 		}
 		printf("%ld ms %d is sleeping\n", ft_time(philos->stime), philos->index + 1);
-		usleep(philos->sleep_time * 1000);
+		ft_sleep(philos->sleep_time);
 		if (ft_inanition(philos))
 			return (NULL);
 		printf("%ld ms %d is thinking\n", ft_time(philos->stime), philos->index + 1);
