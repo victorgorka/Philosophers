@@ -6,7 +6,7 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:15:30 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/29 12:40:14 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/30 15:43:06 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,15 @@
 
 static int	ft_init(t_data *data)
 {
-	struct timeval	time;
 	int				i;
 
 	i = 0;
 	data->philos = malloc(data->n_philo * sizeof(t_philo));
 	if (!data->philos)
 		return (1);
-	gettimeofday(&time, 0);
-	data->stime = (time.tv_sec * 1000) + (time.tv_usec / 1000);
 	while (i < data->n_philo)
 	{
 		data->philos[i].finish = 0;
-		data->philos[i].last_eat = data->stime;
-		data->philos[i].stime = data->stime;
 		data->philos[i].index = i;
 		data->philos[i].n_philo = data->n_philo;
 		data->philos[i].die_time = data->die_time;

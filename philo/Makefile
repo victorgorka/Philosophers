@@ -16,7 +16,9 @@ export HEADER
 
 SRCS	= 	main.c \
 			utils.c \
-			init.c
+			init.c \
+			thread_utils.c \
+			philochecker.c
 OBJS	= ${SRCS:.c=.o}
 NAME	= philo
 CC		= gcc
@@ -29,7 +31,6 @@ all: $(NAME)
 
 
 $(NAME): ${OBJS}
-	@echo "\nCOMPILING PHILOSOPHERS"
 	@${CC} ${CFLAGS} ${OBJS} -o ${NAME}
 	@echo "$(COLOR)$$HEADER"
 
