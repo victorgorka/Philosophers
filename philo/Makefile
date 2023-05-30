@@ -16,7 +16,9 @@ export HEADER
 
 SRCS	= 	main.c \
 			utils.c \
-			init.c
+			init.c \
+			thread_utils.c \
+			philochecker.c
 OBJS	= ${SRCS:.c=.o}
 NAME	= philo
 CC		= gcc
