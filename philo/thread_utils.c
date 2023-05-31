@@ -6,12 +6,16 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 20:40:48 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/30 21:00:02 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/31 15:48:36 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/**
+ * It checks if there is only one philospher. If thats is the case, he could
+ * never take the fork and will die of inanition
+*/
 static int	ft_only_one(t_philo *philos)
 {
 	if (philos->fork2 != NULL)
@@ -29,6 +33,11 @@ static int	ft_only_one(t_philo *philos)
 	return (0);
 }
 
+/**
+ * It let the philosopher to take the forks if its available, and checks if
+ * the philosopher have died of inanition
+ * @return 1 if the thread have to terminate
+*/
 int	ft_take_fork(t_philo *philos)
 {
 	pthread_mutex_lock(&philos->fork1);
@@ -49,6 +58,11 @@ int	ft_take_fork(t_philo *philos)
 	return (0);
 }
 
+/**
+ * It make the philosphers to drop the forks and check if its the last lunch
+ * the philo has.
+ * @return 1 if the thread have termiate
+*/
 int	ft_drop_fork(t_philo *philos)
 {
 	pthread_mutex_unlock(&philos->fork1);
@@ -68,6 +82,10 @@ int	ft_drop_fork(t_philo *philos)
 	return (0);
 }
 
+/**
+ * It checks if the philo have died of inanition
+ * @return 1 if the philo have died
+*/
 int	ft_inanition(t_philo *philos)
 {
 	pthread_mutex_lock(&philos->finish_mutex);

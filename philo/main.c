@@ -6,7 +6,7 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 16:39:54 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/31 12:10:08 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/31 15:55:58 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,16 @@ time_t	ft_time(time_t option)
 		return (t - option);
 }
 
+/**
+ * This function manages the suspension of the main or secundary 
+ * threads.
+ * @param t time in miliseconds or microseconds
+ * @param option depending of the option value it takes the t variable
+ * 				 as miliseconds or microseconds
+ * @param start variable used as reference to calculate when to stop the
+ * 				suspension
+ * @param time variable of type timeval used to get the time in that moment
+*/
 void	ft_sleep(time_t t, int option)
 {
 	time_t			start;
@@ -58,12 +68,17 @@ void	ft_sleep(time_t t, int option)
 	}
 }
 
+/**
+ * Function that contains the rutine of the threads created
+ * @param data struct with the necessary info
+ * @param philos struct of the thread
+ * @return NULL when the thread has finished
+*/
 static void	*philo(void *data)
 {
 	t_philo	*philos;
 
 	philos = (t_philo *)data;
-	printf("n_lunches %d\n", philos->n_lunches);
 	if (philos->index % 2 != 0)
 		usleep(40);
 	while (philos->n_lunches-- != 0)

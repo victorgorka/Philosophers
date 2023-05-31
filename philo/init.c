@@ -6,12 +6,18 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:15:30 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/30 15:43:06 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/31 15:30:58 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/**
+ * Initialization of the philosophers structures
+ * @param data structure with basi info
+ * @param i index iterator
+ * @return return 1 if there is an error
+*/
 static int	ft_init(t_data *data)
 {
 	int				i;
@@ -33,6 +39,13 @@ static int	ft_init(t_data *data)
 	return (0);
 }
 
+/**
+ * It initializes the mutexes used by the philosophers and
+ * and assign the left fork to the philosophers
+ * @param data struct with basi info
+ * @param i index iterator
+ * @return it returns 1 if there is an error
+*/
 int	ft_init_philosophers(t_data *data)
 {
 	int	i;
@@ -58,6 +71,15 @@ int	ft_init_philosophers(t_data *data)
 	return (0);
 }
 
+/**
+ * It checks the arguments passed to the program, and set the data
+ * structure variables
+ * @param argc number of arguments passed to the program
+ * @param argv the arguments passed to the program
+ * @param data structure with basic info for the program
+ * @param i index iterator
+ * @return it returns 1 if there is any error
+*/
 int	ft_input(int argc, char **argv, t_data *data)
 {
 	int	i;
@@ -75,8 +97,8 @@ int	ft_input(int argc, char **argv, t_data *data)
 	data->eat_time = ft_atoi(argv[3]);
 	data->sleep_time = ft_atoi(argv[4]);
 	data->n_lunches = -1;
-	if (data->n_philo < 0 && data->die_time < 0 && data->eat_time < 0
-		&& data->eat_time < 0 && data->sleep_time < 0)
+	if (data->n_philo < 0 || data->die_time < 0 || data->eat_time < 0
+		|| data->eat_time < 0 || data->sleep_time < 0)
 		return (1);
 	if (argc == 6)
 	{
