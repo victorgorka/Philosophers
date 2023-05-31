@@ -6,7 +6,7 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 20:42:39 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/30 21:11:27 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/31 11:54:50 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	ft_check_philos(t_data *data)
 			printf("%ld ms %d has died\n",
 				ft_time(data->philos[i].stime), i + 1);
 			ft_kill_join(data);
+			ft_free(data->philos);
 			return (1);
 		}
 		pthread_mutex_unlock(&data->philos[i].finish_mutex);
@@ -71,5 +72,7 @@ int	ft_check_finish(t_philo *philos, int n_philos)
 		pthread_mutex_unlock(&philos[i].finish_mutex);
 		i++;
 	}
+	if (check == 1)
+		ft_free(philos);
 	return (check);
 }

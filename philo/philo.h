@@ -6,7 +6,7 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 16:26:03 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/30 20:58:57 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/31 11:18:51 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int		ft_init_philosophers(t_data *data);
 // utils.c
 int		ft_atoi(const char *str);
 int		ft_check_args(char *arg);
+void	ft_free(t_philo *philos);
 // threads_utils.c
 int		ft_inanition(t_philo *philos);
 int		ft_drop_fork(t_philo *philos);

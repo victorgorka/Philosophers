@@ -6,7 +6,7 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 14:44:37 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/22 15:23:33 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/31 11:18:20 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,21 @@ int	ft_check_args(char *arg)
 		i++;
 	}
 	return (0);
+}
+
+void	ft_free(t_philo *philos)
+{
+	int	n;
+	int	i;
+
+	n = philos[0].n_philo;
+	i = 0;
+	while(i < n)
+	{
+		pthread_mutex_destroy(&philos[i].fork1);
+		pthread_mutex_destroy(&philos[i].finish_mutex);
+		pthread_mutex_destroy(&philos[i].last_eat_mutex);
+		i++;
+	}
+	free(philos);
 }

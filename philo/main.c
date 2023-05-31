@@ -6,7 +6,7 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 16:39:54 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/30 21:07:48 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/31 12:10:08 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ static void	*philo(void *data)
 	t_philo	*philos;
 
 	philos = (t_philo *)data;
+	printf("n_lunches %d\n", philos->n_lunches);
 	if (philos->index % 2 != 0)
 		usleep(40);
 	while (philos->n_lunches-- != 0)
@@ -93,11 +94,12 @@ int	main(int argc, char **argv)
 	int		i;
 
 	i = 0;
-	data.n_lunches = -1;
 	if (ft_input(argc, argv, &data) || ft_init_philosophers(&data))
-		return (1);
+		return (0);
 	while (i < data.n_philo)
 	{
+		if (i % 2 != 0)
+			ft_sleep(40, 2);
 		data.stime = ft_time(-1);
 		data.philos[i].last_eat = data.stime;
 		data.philos[i].stime = data.stime;
