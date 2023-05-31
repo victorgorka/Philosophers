@@ -6,12 +6,16 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 20:42:39 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/30 21:11:27 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/31 15:55:51 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/**
+ * It changes the variable that indicates the death of the philos
+ * in each structure of the philos.
+*/
 static void	ft_kill_join(t_data *data)
 {
 	int	i;
@@ -29,6 +33,10 @@ static void	ft_kill_join(t_data *data)
 		pthread_join(data->philos[i++].tid, NULL);
 }
 
+/**
+ * It checks if ahve died, if its the case It comunicates it
+ * to the philos so they can tarminate their threads
+*/
 int	ft_check_philos(t_data *data)
 {
 	int	i;
@@ -46,6 +54,7 @@ int	ft_check_philos(t_data *data)
 			printf("%ld ms %d has died\n",
 				ft_time(data->philos[i].stime), i + 1);
 			ft_kill_join(data);
+			ft_free(data->philos);
 			return (1);
 		}
 		pthread_mutex_unlock(&data->philos[i].finish_mutex);
@@ -54,6 +63,14 @@ int	ft_check_philos(t_data *data)
 	return (0);
 }
 
+/**
+ * It checks if the philos have reach the determined number of
+ * lunches, if so, it detach the thread of the philo. If all
+ * philos have reach the limit, it free the array of structures of the 
+ * philos and reeturn 1 to terminate the program.
+ * @param check if its 1, means that all philos have reach the limit of
+ * 				lunches and the function return this value.
+*/
 int	ft_check_finish(t_philo *philos, int n_philos)
 {
 	int	i;
@@ -71,5 +88,7 @@ int	ft_check_finish(t_philo *philos, int n_philos)
 		pthread_mutex_unlock(&philos[i].finish_mutex);
 		i++;
 	}
+	if (check == 1)
+		ft_free(philos);
 	return (check);
 }

@@ -6,7 +6,7 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 16:39:54 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/30 21:07:48 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/31 15:55:58 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,16 @@ time_t	ft_time(time_t option)
 		return (t - option);
 }
 
+/**
+ * This function manages the suspension of the main or secundary 
+ * threads.
+ * @param t time in miliseconds or microseconds
+ * @param option depending of the option value it takes the t variable
+ * 				 as miliseconds or microseconds
+ * @param start variable used as reference to calculate when to stop the
+ * 				suspension
+ * @param time variable of type timeval used to get the time in that moment
+*/
 void	ft_sleep(time_t t, int option)
 {
 	time_t			start;
@@ -58,6 +68,12 @@ void	ft_sleep(time_t t, int option)
 	}
 }
 
+/**
+ * Function that contains the rutine of the threads created
+ * @param data struct with the necessary info
+ * @param philos struct of the thread
+ * @return NULL when the thread has finished
+*/
 static void	*philo(void *data)
 {
 	t_philo	*philos;
@@ -93,11 +109,12 @@ int	main(int argc, char **argv)
 	int		i;
 
 	i = 0;
-	data.n_lunches = -1;
 	if (ft_input(argc, argv, &data) || ft_init_philosophers(&data))
-		return (1);
+		return (0);
 	while (i < data.n_philo)
 	{
+		if (i % 2 != 0)
+			ft_sleep(40, 2);
 		data.stime = ft_time(-1);
 		data.philos[i].last_eat = data.stime;
 		data.philos[i].stime = data.stime;

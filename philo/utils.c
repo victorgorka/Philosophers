@@ -6,12 +6,15 @@
 /*   By: vde-prad <vde-prad@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 14:44:37 by vde-prad          #+#    #+#             */
-/*   Updated: 2023/05/22 15:23:33 by vde-prad         ###   ########.fr       */
+/*   Updated: 2023/05/31 15:33:57 by vde-prad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/**
+ * It checks the sign of the number
+*/
 static int	ft_check_sign(char *str)
 {
 	if (*str == '-')
@@ -19,6 +22,10 @@ static int	ft_check_sign(char *str)
 	return (1);
 }
 
+/**
+ * It transforms a string to int
+ * @return -1 if there is any error
+*/
 int	ft_atoi(const char *str)
 {
 	long	res;
@@ -46,6 +53,10 @@ int	ft_atoi(const char *str)
 	return ((int) res);
 }
 
+/**
+ * It check the arguments passed to the program
+ * @return 1 if there is any error
+*/
 int	ft_check_args(char *arg)
 {
 	int	i;
@@ -58,4 +69,24 @@ int	ft_check_args(char *arg)
 		i++;
 	}
 	return (0);
+}
+
+/**
+ * It free all the memory in the structure
+*/
+void	ft_free(t_philo *philos)
+{
+	int	n;
+	int	i;
+
+	n = philos[0].n_philo;
+	i = 0;
+	while (i < n)
+	{
+		pthread_mutex_destroy(&philos[i].fork1);
+		pthread_mutex_destroy(&philos[i].finish_mutex);
+		pthread_mutex_destroy(&philos[i].last_eat_mutex);
+		i++;
+	}
+	free(philos);
 }
